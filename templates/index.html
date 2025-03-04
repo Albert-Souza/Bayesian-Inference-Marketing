@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayesian Inference - Marketing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<main>
+  <h1>Bayesian Inference - Marketing</h2>
+    <p>Este teste utiliza Distribuição Beta e o método de Monte Carlo com 100.000 amostras para estimar a probabilidade da nova campanha ser melhor que a anterior.</p>
+    <form id="testForm">
+      <label>Visitas da Campanha Atual:</label>
+      <input type="number" id="visits_A" required><br>
+  
+      <label>Conversões da Campanha Atual:</label>
+      <input type="number" id="conversions_A" required><br>
+  
+      <label>Visitas da Nova Campanha:</label>
+      <input type="number" id="visits_B" required><br>
+  
+      <label>Conversões da Nova Campanha:</label>
+      <input type="number" id="conversions_B" required><br>
+  
+      <input type="submit" value="Testar">
+    </form>
+  
+    <h2 id="result"></h3>
+</main>
+    
+  <script>
+      $("#testForm").submit(function(event) {
+          event.preventDefault();
+          
+          $.ajax({
+              url: "/test",
+              type: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({
+                  visits_A: $("#visits_A").val(),
+                  conversions_A: $("#conversions_A").val(),
+                  visits_B: $("#visits_B").val(),
+                  conversions_B: $("#conversions_B").val()
+              }),
+              success: function(response) {
+                  $("#result").text("Probabilidade da nova campanha ser melhor: " + response.probabilidade + "%");
+              }
+          });
+      });
+  </script>
+</body>
+</html>
